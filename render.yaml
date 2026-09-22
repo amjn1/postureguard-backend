@@ -1,7 +1,20 @@
 # render.yaml — Render Blueprint for PostureGuard
 #
-# This file describes the entire PostureGuard cloud stack so Render can
-# provision everything in one click via the "Blueprint" feature.
+# ┌─────────────────────────────────────────────────────────────────────┐
+# │  NOT THE ACTIVE DEPLOYMENT PATH                                     │
+# │                                                                     │
+# │  The project currently runs locally on a laptop exposed via a       │
+# │  Cloudflare Tunnel (see README.md for setup instructions).          │
+# │                                                                     │
+# │  This file is kept so a Render deployment can be restored later by  │
+# │  following the "Alternative: Render.com" section in the README.     │
+# │  If you switch back to Render, also re-enable psycopg2-binary in   │
+# │  requirements.txt and update DATABASE_URL to a postgresql:// URL.  │
+# └─────────────────────────────────────────────────────────────────────┘
+#
+# This file tells Render's "Blueprint" feature how to provision the whole
+# PostureGuard stack (web service + PostgreSQL database) in one click.
+# via the "Blueprint" feature.
 #
 # ─── Deploy steps ────────────────────────────────────────────────────────────
 # 1. Push this repo to GitHub (or GitLab).

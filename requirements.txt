@@ -1,10 +1,12 @@
 # PostureGuard — Python dependencies
-# Pin minor versions for reproducible builds; patch updates are safe.
+# SQLite is built into Python — no database driver package needed.
 
 fastapi==0.115.0
-uvicorn[standard]==0.31.0     # ASGI server with websocket + http/2 extras
-sqlalchemy==2.0.35             # ORM + Core; version 2 required for DeclarativeBase
-psycopg2-binary==2.9.9         # PostgreSQL adapter (binary wheel — no libpq needed)
-pydantic==2.9.2                # Data validation; FastAPI 0.115 requires pydantic v2
-python-dotenv==1.0.1           # Reads .env in local dev
-httpx==0.27.2                  # Used by seed_demo_data.py
+uvicorn[standard]==0.31.0   # ASGI server
+sqlalchemy==2.0.35           # ORM; works with SQLite and PostgreSQL
+pydantic==2.9.2              # Data validation (FastAPI 0.115 requires pydantic v2)
+python-dotenv==1.0.1         # Reads .env in local dev
+httpx==0.27.2                # Used by seed_demo_data.py
+
+# Uncomment if you switch to PostgreSQL (e.g. Render deployment):
+# psycopg2-binary==2.9.9
