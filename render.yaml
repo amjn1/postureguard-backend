@@ -1,0 +1,49 @@
+# render.yaml — Render Blueprint for PostureGuard
+#
+# This file describes the entire PostureGuard cloud stack so Render can
+# provision everything in one click via the "Blueprint" feature.
+#
+# ─── Deploy steps ────────────────────────────────────────────────────────────
+# 1. Push this repo to GitHub (or GitLab).
+# 2. Go to https://dashboard.render.com → New → Blueprint.
+# 3. Connect your GitHub account and select the PostureGuard repository.
+# 4. Render reads this file, shows you the services to create → click "Apply".
+# 5. After the first deploy, go to the web service → Environment → add API_KEY
+#    (the value you generated with: python -c "import secrets; print(secrets.token_hex(32))")
+# 6. Trigger a manual redeploy so the new env var takes effect.
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  - type: web
+    name: postureguard-api
+    env: python
+    region: oregon          # free-tier region — change if your team is elsewhere
+    plan: free
+
+    # Install dependencies from the root requirements.txt
+    buildCommand: pip install -r requirements.txt
+
+    # Run the ASGI server on the PORT Render assigns automatically.
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+
+    # Render polls this URL to decide whether the service is healthy.
+    healthCheckPath: /health
+
+    envVars:
+      # You MUST set API_KEY manually after the first deploy
+      # (Render Dashboard → postureguard-api → Environment → Add env var).
+      - key: API_KEY
+        sync: false   # "sync: false" means Render will not try to auto-fill it
+
+      # DATABASE_URL is injected automatically from the linked PostgreSQL instance.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: postureguard-db   # must match the database name below
+          property: connectionString
+
+databases:
+  - name: postureguard-db
+    databaseName: postureguard
+    user: postureguard_user
+    plan: free
+    region: oregon
